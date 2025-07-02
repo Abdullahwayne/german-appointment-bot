@@ -1,5 +1,5 @@
-const puppeteer = require("puppeteer-core");
-const chromium = require("@sparticuz/chromium");
+const chromium = require('@sparticuz/chromium');
+const puppeteer = require('puppeteer-core');
 const nodemailer = require("nodemailer");
 
 const EMAIL_USER = process.env.EMAIL_USER;
@@ -11,10 +11,17 @@ const PAGE_URL = "https://service2.diplo.de/rktermin/extern/appointment_showMont
 
 (async () => {
   const browser = await puppeteer.launch({
-  args: chromium.args,
-  executablePath: chromium.executablePath, // ✅ fixed
-  headless: chromium.headless,
-});
+    args: chromium.args,
+    defaultViewport: chromium.defaultViewport,
+    executablePath: await chromium.executablePath(), // ← YES — with parentheses!
+    headless: chromium.headless,
+  });
+
+  const page = await browser.newPage();
+  await page.goto('https://example.com');
+  console.log("✅ Page loaded");
+  await browser.close();
+})();
 
   const page = await browser.newPage();
   await page.goto(PAGE_URL, { waitUntil: "networkidle2" });
@@ -43,4 +50,4 @@ const PAGE_URL = "https://service2.diplo.de/rktermin/extern/appointment_showMont
   }
 
   await browser.close();
-})();
+
