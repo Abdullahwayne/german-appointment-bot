@@ -6,7 +6,7 @@ const EMAIL_PASS = process.env.EMAIL_PASS;
 const EMAIL_TO = process.env.EMAIL_TO;
 
 // 🔧 UPDATE THIS: Paste your post-CAPTCHA URL here
-const PAGE_URL = "https://service2.diplo.de/rktermin/extern/appointment_showMonth.do";
+const PAGE_URL = "https://service2.diplo.de/rktermin/extern/appointment_showMonth.do?locationCode=kara&realmId=1116&categoryId=2339&dateStr=30.08.2025";
 
 (async () => {
   const browser = await puppeteer.launch({
