@@ -6,8 +6,8 @@ const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASS = process.env.EMAIL_PASS;
 const EMAIL_TO = process.env.EMAIL_TO;
 
-// 🔧 Replace this with the actual URL after solving CAPTCHA manually
-const PAGE_URL = "https://service2.diplo.de/rktermin/extern/choose_categoryList.do?locationCode=kara&realmId=678"; // example only
+// ✅ Replace this with the actual post-captcha URL (you can test manually)
+const PAGE_URL = "https://service2.diplo.de/rktermin/extern/appointment_showMonth.do?locationCode=kara&realmId=1116&categoryId=2339&dateStr=31.08.2025";
 
 (async () => {
   const browser = await puppeteer.launch({
@@ -41,5 +41,6 @@ const PAGE_URL = "https://service2.diplo.de/rktermin/extern/choose_categoryList.
   } else {
     console.log("❌ No slot found.");
   }
+
   await browser.close();
 })();
