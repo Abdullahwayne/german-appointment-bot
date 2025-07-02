@@ -6,7 +6,8 @@ const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASS = process.env.EMAIL_PASS;
 const EMAIL_TO = process.env.EMAIL_TO;
 
-const PAGE_URL = "https://service2.diplo.de/rktermin/..."; // 🔧 Paste the post-CAPTCHA URL
+// 🔧 Replace this with the actual URL after solving CAPTCHA
+const PAGE_URL = "https://service2.diplo.de/rktermin/...";
 
 (async () => {
   const browser = await puppeteer.launch({
@@ -23,11 +24,23 @@ const PAGE_URL = "https://service2.diplo.de/rktermin/..."; // 🔧 Paste the pos
   if (!text.includes("No appointment")) {
     const transporter = nodemailer.createTransport({
       service: "gmail",
-      auth: { user: EMAIL_USER, pass: EMAIL_PASS },
+      auth: {
+        user: EMAIL_USER,
+        pass: EMAIL_PASS,
+      },
     });
 
     await transporter.sendMail({
       from: `"German Slot Bot" <${EMAIL_USER}>`,
       to: EMAIL_TO,
       subject: "🚨 Slot Available at German Consulate!",
-      text: `A slot migh
+      text: `A slot may be available now!\n\n👉 ${PAGE_URL}`,
+    });
+
+    console.log("✅ Email sent!");
+  } else {
+    console.log("❌ No slot found.");
+  }
+
+  await browser.close();
+})();
