@@ -11,10 +11,10 @@ const PAGE_URL = "https://service2.diplo.de/rktermin/extern/appointment_showMont
 
 (async () => {
   const browser = await puppeteer.launch({
-    args: chromium.args,
-    executablePath: chromium.executablePath,
-    headless: chromium.headless,
-  });
+  args: chromium.args,
+  executablePath: chromium.executablePath, // ✅ fixed
+  headless: chromium.headless,
+});
 
   const page = await browser.newPage();
   await page.goto(PAGE_URL, { waitUntil: "networkidle2" });
