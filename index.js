@@ -10,21 +10,20 @@ const URL = "https://service2.diplo.de/rktermin/extern/choose_realmList.do?locat
 
     const browser = await puppeteer.launch({
       args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
       executablePath: await chromium.executablePath(),
       headless: chromium.headless,
     });
 
     const page = await browser.newPage();
-    await page.goto(URL, { waitUntil: "domcontentloaded" });
+    console.log("🌐 Navigating to appointment page...");
+    await page.goto(URL, { waitUntil: "networkidle0" });
 
-    console.log("🌐 Navigated to page.");
+    const content = await page.content();
 
-    const pageContent = await page.content();
-
-    if (!pageContent.includes("no appointment")) {
+    if (!content.includes("no appointment")) {
       console.log("✅ APPOINTMENT POSSIBLY FOUND!");
 
-      // Email setup
       const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
@@ -36,8 +35,8 @@ const URL = "https://service2.diplo.de/rktermin/extern/choose_realmList.do?locat
       await transporter.sendMail({
         from: process.env.EMAIL_USER,
         to: process.env.EMAIL_TO,
-        subject: "🟢 Appointment Available!",
-        text: "An appointment may be available. Visit the site now:\n" + URL,
+        subject: "🟢 German Appointment May Be Available!",
+        text: `Visit the page: ${URL}`,
       });
 
       console.log("📬 Email sent.");
@@ -48,6 +47,6 @@ const URL = "https://service2.diplo.de/rktermin/extern/choose_realmList.do?locat
     await browser.close();
     console.log("🛑 Browser closed.");
   } catch (err) {
-    console.error("❗ Error:", err.message);
+    console.error("❗ Error during check:", err.message);
   }
 })();
