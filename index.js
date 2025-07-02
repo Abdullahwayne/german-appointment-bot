@@ -1,37 +1,33 @@
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-core");
+const chromium = require("@sparticuz/chromium");
 const nodemailer = require("nodemailer");
 
 const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASS = process.env.EMAIL_PASS;
 const EMAIL_TO = process.env.EMAIL_TO;
 
-// 🔧 UPDATE THIS: Paste your post-CAPTCHA URL here
-const PAGE_URL = "https://service2.diplo.de/rktermin/extern/appointment_showMonth.do?locationCode=kara&realmId=1116&categoryId=2339&dateStr=30.08.2025";
+const PAGE_URL = "https://service2.diplo.de/rktermin/..."; // 🔧 Paste the post-CAPTCHA URL
 
 (async () => {
   const browser = await puppeteer.launch({
-    headless: true,
-    args: ["--no-sandbox"],
+    args: chromium.args,
+    executablePath: await chromium.executablePath(),
+    headless: chromium.headless,
   });
+
   const page = await browser.newPage();
   await page.goto(PAGE_URL, { waitUntil: "networkidle2" });
 
   const text = await page.evaluate(() => document.body.innerText);
+
   if (!text.includes("No appointment")) {
-    let transporter = nodemailer.createTransport({
+    const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: { user: EMAIL_USER, pass: EMAIL_PASS },
     });
 
     await transporter.sendMail({
-      from: `"Appointment Alert" <${EMAIL_USER}>`,
+      from: `"German Slot Bot" <${EMAIL_USER}>`,
       to: EMAIL_TO,
-      subject: "🚨 Appointment Slot Available!",
-      text: `🎯 A slot is now available! Visit: ${PAGE_URL}`,
-    });
-    console.log("✅ Email sent!");
-  } else {
-    console.log("❌ No slot yet.");
-  }
-  await browser.close();
-})();
+      subject: "🚨 Slot Available at German Consulate!",
+      text: `A slot migh
