@@ -6,8 +6,8 @@ const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASS = process.env.EMAIL_PASS;
 const EMAIL_TO = process.env.EMAIL_TO;
 
-// 🔧 Replace this with the actual URL after solving CAPTCHA
-const PAGE_URL = "https://service2.diplo.de/rktermin/...";
+// 🔧 Replace this with the actual URL after solving CAPTCHA manually
+const PAGE_URL = "https://service2.diplo.de/rktermin/extern/choose_categoryList.do?locationCode=kara&realmId=678"; // example only
 
 (async () => {
   const browser = await puppeteer.launch({
