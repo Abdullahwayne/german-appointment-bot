@@ -41,6 +41,5 @@ const PAGE_URL = "https://service2.diplo.de/rktermin/extern/choose_categoryList.
   } else {
     console.log("❌ No slot found.");
   }
-
   await browser.close();
 })();
